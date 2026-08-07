@@ -35,8 +35,13 @@ python bot.py
 
 ## Commands
 
-- `/dm user content`
+- `/dm message:Hello times:1 username:@user`
+- `/dm message:Hello times:1 user_id:123456789012345678`
 - `!dm @user content` (or the prefix you configured)
+
+The `times` option is required for compatibility with the requested command
+shape but only accepts `1`; bulk or repeated DM sending is intentionally not
+supported.
 
 The recipient must allow direct messages from the bot. Discord may still
 reject delivery when the recipient has DMs disabled, blocked the bot, or the
