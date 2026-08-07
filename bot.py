@@ -50,7 +50,7 @@ GUILD_ID = optional_int_env("GUILD_ID") or optional_int_env("GUILDID")
 OWNER_ID = optional_int_env("OWNER_ID")
 COOLDOWN_SECONDS = 30
 MAX_CONTENT_LENGTH = 2_000
-MAX_SEND_COUNT = 100000
+MAX_SEND_COUNT = 10000
 
 intents = nextcord.Intents.default()
 intents.guilds = True
@@ -178,7 +178,7 @@ async def dm_slash(
         max_length=MAX_CONTENT_LENGTH,
     ),
     times: int = nextcord.SlashOption(
-        description="Number of messages (must be 1)",
+        description="Number of messages (1 to 10000)",
         min_value=1,
         max_value=MAX_SEND_COUNT,
     ),
@@ -208,13 +208,6 @@ async def dm_slash(
     )
     if permission_message:
         await interaction.response.send_message(permission_message, ephemeral=True)
-        return
-
-    if times != MAX_SEND_COUNT:
-        await interaction.response.send_message(
-            "Only one message per command is allowed.",
-            ephemeral=True,
-        )
         return
 
     await interaction.response.defer(ephemeral=True)
