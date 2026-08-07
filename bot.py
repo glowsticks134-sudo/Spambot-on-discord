@@ -156,28 +156,6 @@ async def send_dm_with_owner_copy(
     return None
 
 
-async def resolve_recipient(
-    selected_user: nextcord.User | None,
-    user_id: str | None,
-) -> tuple[nextcord.User | None, str | None]:
-    """Resolve the selected user or an explicit Discord user ID."""
-    if selected_user and user_id:
-        return None, "Choose either a username or a user ID, not both."
-    if user_id:
-        if not user_id.isdigit():
-            return None, "User ID must contain digits only."
-        try:
-            return await client.fetch_user(int(user_id)), None
-        except nextcord.NotFound:
-            return None, "No Discord user was found with that user ID."
-        except nextcord.HTTPException:
-            logger.exception("Discord user lookup failed")
-            return None, "Discord could not look up that user right now."
-    if selected_user:
-        return selected_user, None
-    return None, "Choose a username or provide a user ID."
-
-
 @client.event
 async def on_ready() -> None:
     logger.info("Logged in as %s (%s)", client.user, client.user.id)
@@ -204,17 +182,9 @@ async def dm_slash(
         min_value=1,
         max_value=MAX_SEND_COUNT,
     ),
-    username: nextcord.User | None = nextcord.SlashOption(
+    username: nextcord.User = nextcord.SlashOption(
         description="Recipient username",
-        required=False,
-        default=None,
-    ),
-    user_id: str | None = nextcord.SlashOption(
-        description="Recipient user ID (alternative to username)",
-        required=False,
-        default=None,
-        min_length=17,
-        max_length=20,
+        required=True,
     ),
 ) -> None:
     if not interaction.guild:
@@ -248,18 +218,13 @@ async def dm_slash(
         return
 
     await interaction.response.defer(ephemeral=True)
-    user, lookup_error = await resolve_recipient(username, user_id)
-    if lookup_error or not user:
-        await interaction.followup.send(lookup_error, ephemeral=True)
-        return
-
-    error = await send_dm_with_owner_copy(interaction.user.id, user, message)
+    error = await send_dm_with_owner_copy(interaction.user.id, username, message)
     if error:
         await interaction.followup.send(error, ephemeral=True)
     else:
         copy_note = " A copy was sent to the bot owner." if OWNER_ID else ""
         await interaction.followup.send(
-            f"DM sent to {user}.{copy_note}",
+            f"DM sent to {username}.{copy_note}",
             ephemeral=True,
         )
 

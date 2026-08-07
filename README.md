@@ -47,7 +47,6 @@ python bot.py
 ## Commands
 
 - `/dm message:Hello times:1 username:@user`
-- `/dm message:Hello times:1 user_id:123456789012345678`
 - `!dm @user content` (or the prefix you configured)
 
 The `times` option is required for compatibility with the requested command
@@ -55,7 +54,7 @@ shape but only accepts `1`; bulk or repeated DM sending is intentionally not
 supported.
 
 With `OWNER_ID` configured, the owner can run `/dm` directly in a DM with the
-bot. The bot sends the message to the selected user and sends the owner an
+bot. The bot sends the message to the selected username and sends the owner an
 identical copy. Discord does not support a bot creating one shared private DM
 between two other users, and this bot cannot log in as or impersonate a
 personal account.
