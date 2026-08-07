@@ -8,7 +8,6 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
-from collections import defaultdict
 
 import nextcord
 from dotenv import load_dotenv
@@ -48,7 +47,7 @@ PREFIX = os.getenv("PREFIX", "!").strip() or "!"
 GUILD_ID = optional_int_env("GUILD_ID") or optional_int_env("GUILDID")
 OWNER_ID = optional_int_env("OWNER_ID")
 MAX_CONTENT_LENGTH = 2_000
-MAX_SEND_COUNT = 10000
+MAX_SEND_COUNT = 100000
 
 intents = nextcord.Intents.default()
 intents.guilds = True
@@ -164,7 +163,7 @@ async def dm_slash(
         max_length=MAX_CONTENT_LENGTH,
     ),
     times: int = nextcord.SlashOption(
-        description="Number of messages (1 to 10000)",
+        description="Number of messages (1 to 100000)",
         min_value=1,
         max_value=MAX_SEND_COUNT,
     ),
@@ -198,7 +197,7 @@ async def dm_slash(
 
     await interaction.response.defer(ephemeral=True)
     
-    # Send messages in batch
+    # Send messages in batch with minimal delay
     sent_count = 0
     failed_at = None
     last_error = None
@@ -210,8 +209,10 @@ async def dm_slash(
             last_error = error
             break
         sent_count += 1
-        # Small delay to avoid rate limiting (Discord allows ~1 DM per user per second)
-        await asyncio.sleep(0.1)
+        # Minimal delay to avoid rate limiting (removed for maximum speed)
+        # Add small yield to allow event loop to process
+        if i % 100 == 0:
+            await asyncio.sleep(0)
     
     copy_note = " A copy was sent to the bot owner." if OWNER_ID else ""
     
