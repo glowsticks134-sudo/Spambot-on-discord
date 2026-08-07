@@ -1,17 +1,37 @@
-# Spambot-on-discord
- Discord bot spam at dm with prefix or slash command
+# Discord DM utility bot
 
-# Requirements
- - Nextcord
- - OS
- - python-dotenv
+This project is a small [nextcord](https://nextcord.readthedocs.io/) bot for
+moderation and support workflows. It provides `/dm` and `<prefix>dm` commands.
+Each command sends **one** direct message, requires the caller to have the
+Manage Messages permission, rate-limits each caller, and disables mentions in
+the delivered message.
 
-# How to create a bot
- You need to create application at https://discord.com/developers/applications copy token and put in .env file
- 
- After these steps, go to the "BOT" tab and select all the things from the picture
- ![image](https://user-images.githubusercontent.com/72410646/229547852-e9ce940e-c502-4d43-8dac-535d237fe2c6.png)
+## Setup on Replit
 
- When creating a URL, mark these things:
- ![image](https://user-images.githubusercontent.com/72410646/229548100-8ac64639-d752-4aa3-8c08-558a90b5e6b5.png)
- 
+1. Create a bot application in the
+   [Discord Developer Portal](https://discord.com/developers/applications).
+2. Enable the **Message Content Intent** and **Server Members Intent** on the
+   bot's **Privileged Gateway Intents** page.
+3. Add the bot to your server with the `bot` and `applications.commands` scopes.
+   The bot needs permission to view the server and send messages.
+4. Add `TOKEN` as a Replit Secret. Never commit a Discord token to `.env` or
+   source control.
+5. Add `GUILD_ID` as an environment variable for the server where you are
+   testing. This makes `/dm` appear quickly. `PREFIX` defaults to `!`.
+
+## Local setup
+
+```bash
+cp .env.example .env
+python -m pip install -r requirements.txt
+python bot.py
+```
+
+## Commands
+
+- `/dm user content`
+- `!dm @user content` (or the prefix you configured)
+
+The recipient must allow direct messages from the bot. Discord may still
+reject delivery when the recipient has DMs disabled, blocked the bot, or the
+bot cannot resolve the user.
