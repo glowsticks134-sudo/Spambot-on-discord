@@ -1,14 +1,13 @@
-"""A small, rate-limited Discord DM utility built with nextcord.
+"""A small Discord DM utility built with nextcord.
 
-The bot intentionally sends one DM per command.  This keeps the command useful
-for moderation/support workflows without providing an unlimited DM spam loop.
+The bot sends direct messages to users and supports batch sending.
 """
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
-import time
 from collections import defaultdict
 
 import nextcord
@@ -48,7 +47,6 @@ TOKEN = required_env("TOKEN")
 PREFIX = os.getenv("PREFIX", "!").strip() or "!"
 GUILD_ID = optional_int_env("GUILD_ID") or optional_int_env("GUILDID")
 OWNER_ID = optional_int_env("OWNER_ID")
-COOLDOWN_SECONDS = 30
 MAX_CONTENT_LENGTH = 2_000
 MAX_SEND_COUNT = 10000
 
@@ -63,10 +61,6 @@ client = commands.Bot(
     help_command=None,
 )
 
-# A per-user cooldown prevents accidental rapid repeats without blocking the
-# rest of the server from using the bot.
-last_dm_at: defaultdict[int, float] = defaultdict(lambda: 0.0)
-
 
 def permission_error(member: nextcord.Member) -> str | None:
     if not member.guild_permissions.manage_messages:
@@ -79,13 +73,9 @@ def owner_authorized(user: nextcord.User | nextcord.Member) -> bool:
 
 
 def validate_dm_request(
-    sender_id: int,
     recipient: nextcord.User,
     content: str,
 ) -> str | None:
-    remaining = COOLDOWN_SECONDS - (time.monotonic() - last_dm_at[sender_id])
-    if remaining > 0:
-        return f"Please wait {remaining:.0f}s before sending another DM."
     if client.user and recipient.id == client.user.id:
         return "Please choose a human recipient."
     if not content.strip():
@@ -114,35 +104,31 @@ async def deliver_dm(
 
 
 async def send_dm(
-    sender_id: int,
     recipient: nextcord.User,
     content: str,
 ) -> str | None:
     """Validate and send one non-pinging DM."""
-    error = validate_dm_request(sender_id, recipient, content)
+    error = validate_dm_request(recipient, content)
     if error:
         return error
     error = await deliver_dm(recipient, content)
     if error:
         return error
-    last_dm_at[sender_id] = time.monotonic()
     return None
 
 
 async def send_dm_with_owner_copy(
-    sender_id: int,
     recipient: nextcord.User,
     content: str,
 ) -> str | None:
     """Send to the recipient and, when configured, send the owner a copy."""
-    error = validate_dm_request(sender_id, recipient, content)
+    error = validate_dm_request(recipient, content)
     if error:
         return error
 
     error = await deliver_dm(recipient, content)
     if error:
         return error
-    last_dm_at[sender_id] = time.monotonic()
 
     if OWNER_ID and OWNER_ID != recipient.id:
         try:
@@ -164,7 +150,7 @@ async def on_ready() -> None:
 
 @client.slash_command(
     name="dm",
-    description="Send one direct message to a user",
+    description="Send direct messages to a user",
     # A global command is required so the owner can use it in a DM with the bot.
     # It may take up to an hour to appear after the first deployment.
     guild_ids=None,
@@ -211,13 +197,32 @@ async def dm_slash(
         return
 
     await interaction.response.defer(ephemeral=True)
-    error = await send_dm_with_owner_copy(interaction.user.id, username, message)
-    if error:
-        await interaction.followup.send(error, ephemeral=True)
-    else:
-        copy_note = " A copy was sent to the bot owner." if OWNER_ID else ""
+    
+    # Send messages in batch
+    sent_count = 0
+    failed_at = None
+    last_error = None
+    
+    for i in range(times):
+        error = await send_dm_with_owner_copy(username, message)
+        if error:
+            failed_at = i + 1
+            last_error = error
+            break
+        sent_count += 1
+        # Small delay to avoid rate limiting (Discord allows ~1 DM per user per second)
+        await asyncio.sleep(0.1)
+    
+    copy_note = " A copy was sent to the bot owner." if OWNER_ID else ""
+    
+    if failed_at:
         await interaction.followup.send(
-            f"DM sent to {username}.{copy_note}",
+            f"Sent {sent_count}/{times} messages. Failed at message {failed_at}: {last_error}",
+            ephemeral=True,
+        )
+    else:
+        await interaction.followup.send(
+            f"Successfully sent {sent_count} DM(s) to {username}.{copy_note}",
             ephemeral=True,
         )
 
@@ -233,7 +238,7 @@ async def dm_prefix(
     *,
     content: str,
 ) -> None:
-    error = await send_dm_with_owner_copy(ctx.author.id, user, content)
+    error = await send_dm_with_owner_copy(user, content)
     await ctx.send(
         error or f"DM sent to {user}."
         + (" A copy was sent to the bot owner." if OWNER_ID else ""),
