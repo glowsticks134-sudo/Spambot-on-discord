@@ -50,7 +50,7 @@ GUILD_ID = optional_int_env("GUILD_ID") or optional_int_env("GUILDID")
 OWNER_ID = optional_int_env("OWNER_ID")
 COOLDOWN_SECONDS = 30
 MAX_CONTENT_LENGTH = 2_000
-MAX_SEND_COUNT = 1
+MAX_SEND_COUNT = 100000
 
 intents = nextcord.Intents.default()
 intents.guilds = True
