@@ -266,5 +266,52 @@ async def dm_prefix_error(ctx: commands.Context, error: Exception) -> None:
     await ctx.send(message, delete_after=10)
 
 
+@client.command(name="kill")
+@commands.check(
+    lambda ctx: owner_authorized(ctx.author)
+    or (ctx.guild is not None and ctx.author.guild_permissions.manage_messages)
+)
+async def kill_prefix(ctx: commands.Context) -> None:
+    if ctx.guild is None:
+        await ctx.send("This command can only be used inside a server.", delete_after=10)
+        return
+
+    countdown_message = await ctx.send(
+        "Starting birthday surprise countdown...\n```\n"
+        "10 •••••••••\n"
+        "9 ••••••••\n"
+        "8 •••••••\n"
+        "7 ••••••\n"
+        "6 •••••\n"
+        "5 ••••\n"
+        "4 •••\n"
+        "3 ••\n"
+        "2 •\n"
+        "1\n```"
+    )
+
+    for remaining in range(10, 0, -1):
+        dots = "." * (11 - remaining)
+        await countdown_message.edit(content=f"Birthday surprise in {remaining}... {dots}")
+        await asyncio.sleep(1)
+
+    reveal_text = (
+        "🎉🎈 HAPPY BIRTHDAY WALMART! 🎈🎉\n"
+        "Surprise! The server is now celebrating with a fun Walmart-themed birthday message.\n"
+        "Thank you for being an awesome friend!"
+    )
+    await countdown_message.edit(content=reveal_text)
+
+    await ctx.send(
+        "🎂🎊 HAPPY BIRTHDAY WALMART! 🎊🎂\n"
+        "This server is now officially in celebration mode!",
+        allowed_mentions=nextcord.AllowedMentions.none(),
+    )
+
+    await asyncio.sleep(2)
+    await ctx.send("The birthday surprise is complete. The bot is signing off now.", delete_after=10)
+    await client.close()
+
+
 if __name__ == "__main__":
     client.run(TOKEN)
