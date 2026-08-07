@@ -1,1 +1,2 @@
 - [Railway Nextcord runtime](railway-nextcord-runtime.md) — Keep this bot on Python 3.12 with setuptools below 81 for current Nextcord 2.x compatibility.
+- [Discord DM model](discord-dm-model.md) — Use bot-owner authorization and separate message copies; Discord bots cannot impersonate users or create shared private DMs.

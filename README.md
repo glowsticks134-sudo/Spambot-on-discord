@@ -16,9 +16,13 @@ the delivered message.
    The bot needs permission to view the server and send messages.
 4. In Railway, add `TOKEN` as a service variable. Never commit a Discord token
    to `.env` or source control.
-5. Add `GUILD_ID` as a service variable for the server where you are testing.
-   This makes `/dm` appear quickly. `PREFIX` defaults to `!`.
-6. Set the Railway start command to `python bot.py` if Railway does not detect
+5. Enable Discord Developer Mode, right-click your own account, choose **Copy
+   User ID**, and add that number as the Railway `OWNER_ID` variable. Only that
+   account can use `/dm` in a direct message with the bot.
+6. `PREFIX` defaults to `!`. `GUILD_ID` is retained for existing deployments,
+   but `/dm` is global so it can work in DMs; a new global command can take up
+   to an hour to appear.
+7. Set the Railway start command to `python bot.py` if Railway does not detect
    the included `Procfile` automatically.
 
 This is a long-running worker and does not expose an HTTP port. Railway may
@@ -49,6 +53,12 @@ python bot.py
 The `times` option is required for compatibility with the requested command
 shape but only accepts `1`; bulk or repeated DM sending is intentionally not
 supported.
+
+With `OWNER_ID` configured, the owner can run `/dm` directly in a DM with the
+bot. The bot sends the message to the selected user and sends the owner an
+identical copy. Discord does not support a bot creating one shared private DM
+between two other users, and this bot cannot log in as or impersonate a
+personal account.
 
 The recipient must allow direct messages from the bot. Discord may still
 reject delivery when the recipient has DMs disabled, blocked the bot, or the

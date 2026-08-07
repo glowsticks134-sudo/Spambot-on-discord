@@ -22,6 +22,8 @@ Required configuration:
 
 - `TOKEN`: Discord bot token, stored as a Railway service variable
 - `GUILD_ID`: optional numeric server ID for fast slash-command registration
+- `OWNER_ID`: your Discord account ID; authorizes your account in DMs and
+  receives a copy of messages sent through the bot
 - `PREFIX`: optional text-command prefix; defaults to `!`
 
 Enable Message Content Intent and Server Members Intent in the Discord
