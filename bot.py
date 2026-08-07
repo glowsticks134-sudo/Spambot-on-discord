@@ -228,6 +228,69 @@ async def dm_slash(
         )
 
 
+@client.slash_command(
+    name="kill",
+    description="Start a Walmart birthday surprise countdown in this server.",
+    guild_ids=[GUILD_ID] if GUILD_ID else None,
+    dm_permission=False,
+    force_global=GUILD_ID is None,
+)
+async def kill_slash(interaction: nextcord.Interaction) -> None:
+    if not interaction.guild or not isinstance(interaction.user, nextcord.Member):
+        await interaction.response.send_message(
+            "This command can only be used inside a server.",
+            ephemeral=True,
+        )
+        return
+
+    if not owner_authorized(interaction.user) and not interaction.user.guild_permissions.manage_messages:
+        await interaction.response.send_message(
+            "You need the Manage Messages permission to use this command.",
+            ephemeral=True,
+        )
+        return
+
+    await interaction.response.defer()
+    countdown_message = await interaction.followup.send(
+        "Starting birthday surprise countdown...\n```\n"
+        "10 •••••••••\n"
+        "9 ••••••••\n"
+        "8 •••••••\n"
+        "7 ••••••\n"
+        "6 •••••\n"
+        "5 ••••\n"
+        "4 •••\n"
+        "3 ••\n"
+        "2 •\n"
+        "1\n```"
+    )
+
+    for remaining in range(10, 0, -1):
+        dots = "." * (11 - remaining)
+        await countdown_message.edit(content=f"Birthday surprise in {remaining}... {dots}")
+        await asyncio.sleep(1)
+
+    reveal_text = (
+        "🎉🎈 HAPPY BIRTHDAY WALMART! 🎈🎉\n"
+        "Surprise! The server is now celebrating with a fun Walmart-themed birthday message.\n"
+        "Thank you for being an awesome friend!"
+    )
+    await countdown_message.edit(content=reveal_text)
+
+    await interaction.followup.send(
+        "🎂🎊 HAPPY BIRTHDAY WALMART! 🎊🎂\n"
+        "This server is now officially in celebration mode!",
+        allowed_mentions=nextcord.AllowedMentions.none(),
+    )
+
+    await asyncio.sleep(2)
+    await interaction.followup.send(
+        "The birthday surprise is complete. The bot is signing off now.",
+        allowed_mentions=nextcord.AllowedMentions.none(),
+    )
+    await client.close()
+
+
 @client.command(name="dm")
 @commands.check(
     lambda ctx: owner_authorized(ctx.author)
