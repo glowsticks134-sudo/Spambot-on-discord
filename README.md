@@ -25,6 +25,10 @@ This is a long-running worker and does not expose an HTTP port. Railway may
 show no web URL for the service; a healthy deployment is indicated by the
 startup log showing that the bot logged in successfully.
 
+The included `runtime.txt` pins Railway to Python 3.12.11. This is required
+because Python 3.13 removed the standard-library `audioop` module that
+Nextcord still imports at startup.
+
 ## Local setup
 
 ```bash
