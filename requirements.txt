@@ -1,2 +1,4 @@
 nextcord>=2.6.0,<3
 python-dotenv>=1.0.0,<2
+# Nextcord 2.x imports pkg_resources, which setuptools 81+ removed.
+setuptools<81

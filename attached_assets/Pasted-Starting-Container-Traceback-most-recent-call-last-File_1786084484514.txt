@@ -1,0 +1,89 @@
+Starting Container
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'
+Traceback (most recent call last):
+  File "/app/bot.py", line 14, in <module>
+    import nextcord
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/__init__.py", line 43, in <module>
+    from .health_check import *
+  File "/app/.venv/lib/python3.12/site-packages/nextcord/health_check.py", line 5, in <module>
+    from pkg_resources import DistributionNotFound, get_distribution
+ModuleNotFoundError: No module named 'pkg_resources'

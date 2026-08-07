@@ -10,6 +10,8 @@ include a per-user cooldown.
 The project uses Python 3.12 and the dependencies in `requirements.txt`.
 `runtime.txt` pins Railway to Python 3.12.11 because Python 3.13 removed the
 standard-library `audioop` module that Nextcord still imports at startup.
+`requirements.txt` also pins setuptools below 81 because Nextcord 2.x imports
+the `pkg_resources` compatibility module.
 Railway runs the long-lived worker with the included `Procfile`:
 
 ```text

@@ -29,6 +29,9 @@ The included `runtime.txt` pins Railway to Python 3.12.11. This is required
 because Python 3.13 removed the standard-library `audioop` module that
 Nextcord still imports at startup.
 
+The requirements also pin `setuptools` below version 81 because Nextcord 2.x
+uses `pkg_resources`, which newer setuptools releases removed.
+
 ## Local setup
 
 ```bash
